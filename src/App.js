@@ -1,10 +1,9 @@
 import './App.css';
-import AddContactContainer from './addContact/addContact_Container';
-
+import ContactListContainer from './ContactList/contactList_Container';
 function App() {
   return (
     <div className="App">
-      <AddContactContainer />
+      <ContactListContainer />
     </div>
   );
 }

@@ -5,47 +5,49 @@ class AddContactContainer extends Component {
     constructor (props){
         super(props)
         this.state = { 
-            contact: {
-                name: '',
-                address: '',
-                phone: 0,
-            }
+            name: '',
+            address: '',
+            phone: '',
         }
     }
-    enterName = name => {
+    enterName = event => {
         this.setState({
-            contact: {name: name}
+            name: event.target.value
         })
-        console.log(this.state.contact.name)
     }
     enterAddress = address => {
         this.setState({
-            contact: {address: address}
+            address: address
         })
     }
-    enterPhone = phone => {
+    enterPhone = (phone) => {
+        let number = phone.toString()
+        let number2 = number.replaceAll('-', '')
         this.setState({
-            contact: {phone: phone}
+            phone: number2
         })
     }
-    submitContact = (contact = this.state.contact) => {
+    
+    submitContact = (x = this.formatPhone) => {
         fetch('http://localhost:3000/add', {
             method: 'post',
             headers: {'content-type' : 'application/json'},
             body: JSON.stringify({
-                name: contact.name,
-                address: contact.address,
-                phone: contact.phone
+                name: this.state.name,
+                address: this.state.address,
+                phone: this.state.phone
             })
         })
         .then(response => response.json())
         .then(res => console.log(res))
+        .then(res => this.props.updateList())
+        //.then(res => window.location.reload())
     }
 
     render () {
         const {enterName, enterAddress, enterPhone, submitContact } = this;
         return (
-            <AddContactComponent {...this}/>
+            <AddContactComponent enterName={enterName} enterAddress={enterAddress} enterPhone={enterPhone} submitContact={submitContact}/>
         )
     }
 }
