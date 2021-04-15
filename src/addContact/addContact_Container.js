@@ -21,24 +21,22 @@ class AddContactContainer extends Component {
         })
     }
     enterPhone = (phone) => {
-        let number = phone.toString()
-        let number2 = number.replaceAll('-', '')
         this.setState({
-            phone: number2
+            phone: phone
         })
     }
     
-    submitContact = (x = this.formatPhone) => {
+    submitContact = () => {
         fetch('http://localhost:3000/add', {
             method: 'post',
             headers: {'content-type' : 'application/json'},
             body: JSON.stringify({
                 name: this.state.name,
                 address: this.state.address,
-                phone: this.state.phone
+                phone: this.state.phone,
             })
         })
-        .then(response => response.json())
+        .then(response => {response.json()})
         .then(res => console.log(res))
         .then(res => this.props.updateList())
         //.then(res => window.location.reload())

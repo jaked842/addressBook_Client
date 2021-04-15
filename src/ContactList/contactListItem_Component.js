@@ -1,6 +1,7 @@
 import React from 'react';
 
-const ContactListItem = ({name, address, phone}) => {
+
+const ContactListItem = ({index, id,  name, address, phone, onEditName}) => {
 
     const formatNum = () => {
         let num1 = phone.slice(0, 3);
@@ -9,13 +10,14 @@ const ContactListItem = ({name, address, phone}) => {
         let finalnum = num1 + '-' + num2 + '-' + num3;
         return finalnum
     }
-
     return(
         <div>
             <form>
-                <input type='text' value={name}></input>
-                <input type='text' value={address}></input>
-                <input type='text' value={formatNum()}></input>
+                <input type='text' onChange={(event) => onEditName(event.target.value, index)} value={name} ></input>
+                <input type='text' value={address} ></input>
+                <input type='text' value={formatNum()} ></input>
+                <h4>index: {index}</h4>
+                <h4>id: {id}</h4>
             </form>
         </div>
     )
