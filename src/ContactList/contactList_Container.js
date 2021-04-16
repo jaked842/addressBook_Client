@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ContactListItem from './contactListItem_Component';
 import AddContactContainer from '../addContact/addContact_Container';
 import SearchListComponent from './searchList_Component';
-import Save from '../save'
+import Save from '../save';
 
 class ContactListContainer extends Component {
     constructor(props) {
@@ -11,7 +11,7 @@ class ContactListContainer extends Component {
             list: [],
             listSearch: '',
             filteredList: '',
-            change: ''
+            change: false
         }
     }
 
@@ -37,9 +37,9 @@ class ContactListContainer extends Component {
         let arr = this.state.list;
         arr[index].name = event
         this.setState({
-            list: arr
-        })
-     
+            list: arr, 
+            change: true
+        })     
     }
 
    /* updateItem = (value, type, index) => {
@@ -56,9 +56,9 @@ class ContactListContainer extends Component {
     render () {
         console.log(this.state.list)
         const {updateList, searchList, onEditName} = this;
-
-        return (
-            <div>
+        if(this.state.change) {
+            return (
+                <div>
                 <AddContactContainer updateList={updateList} />
                 <SearchListComponent searchList={searchList} />
                 <Save />
@@ -69,9 +69,28 @@ class ContactListContainer extends Component {
                         <ContactListItem key={index} index={index} id={value.id} name={value.name} address={value.address} phone={value.phone} onEditName={onEditName}/>
                     ))
                 }
-            </div>
-            
-        )
+                </div>
+            )
+        } else {
+
+            return (
+                <div>
+                    <AddContactContainer updateList={updateList} />
+                    <SearchListComponent searchList={searchList} />
+                    {
+                        
+                    }
+                    {
+                        this.state.list.filter(item => {
+                            return item.name.toLowerCase().includes(this.state.listSearch)})
+                        .map((value, index) => (
+                            <ContactListItem key={index} index={index} id={value.id} name={value.name} address={value.address} phone={value.phone} onEditName={onEditName}/>
+                        ))
+                    }
+                </div>
+                
+            )
+        }
     }
 }
 
