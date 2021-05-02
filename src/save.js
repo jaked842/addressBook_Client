@@ -1,8 +1,8 @@
 import React from 'react';
 
-const Save = () => {
+const Save = ({onSave}) => {
     return (
-        <button type='button'>Save</button>
+        <button type='button' onClick={() => onSave()}>Save</button>
     )
 }
 
