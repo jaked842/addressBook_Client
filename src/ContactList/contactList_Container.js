@@ -11,7 +11,8 @@ class ContactListContainer extends Component {
             list: [],
             listSearch: '',
             filteredList: '',
-            change: false
+            change: false, 
+            phoneChange: false
         }
     }
 
@@ -54,10 +55,18 @@ class ContactListContainer extends Component {
         arr[index].phone = event
         this.setState({
             list: arr, 
-            change: true
+            change: true,
+            phoneChange: true
         })     
     }
-    
+    onDel = (index) => {
+        let arr = this.state.list;
+        arr.splice(index, 1);
+        this.setState({
+            list: arr, 
+            change: true
+        })
+    }
 
     onSave = () => {
         fetch('http://localhost:3000/deleteall', {
@@ -65,8 +74,6 @@ class ContactListContainer extends Component {
             headers: {'content-type' : 'application/json'},
         })
         .then(res => {
-            {
-                console.log(res)
                 fetch('http://localhost:3000/changeaddress', {
                     method: 'post',
                     headers: {'content-type': 'application/json'},
@@ -76,7 +83,11 @@ class ContactListContainer extends Component {
                 })
                 .then(res => res.json())
                 .then(resp => console.log(resp))
-            }
+        })
+        .then(() => {
+            this.setState({
+                change: false
+            })
         })
     }
 
@@ -93,7 +104,8 @@ class ContactListContainer extends Component {
 
     render () {
         console.log(this.state.list)
-        const {updateList, searchList, onEditName, onEditAddress, onEditPhone, onSave} = this;
+        const {updateList, searchList, onEditName, onEditAddress, onEditPhone, onSave, onDel} = this;
+        const { phoneChange } = this.state;
         if(this.state.change) {
             return (
                 <div>
@@ -104,7 +116,14 @@ class ContactListContainer extends Component {
                     this.state.list.filter(item => {
                         return item.name.toLowerCase().includes(this.state.listSearch)})
                     .map((value, index) => (
-                        <ContactListItem key={index} index={index} id={value.id} name={value.name} address={value.address} phone={value.phone} onEditName={onEditName} onEditAddress={onEditAddress} onEditPhone={onEditPhone}/>
+                        <ContactListItem 
+                            key={index} index={index} 
+                            id={value.id} name={value.name} 
+                            address={value.address} phone={value.phone} 
+                            onEditName={onEditName} onEditAddress={onEditAddress} 
+                            onEditPhone={onEditPhone} phoneChange={phoneChange} 
+                            onDel={onDel}
+                        />
                     ))
                 }
                 </div>
@@ -122,7 +141,14 @@ class ContactListContainer extends Component {
                         this.state.list.filter(item => {
                             return item.name.toLowerCase().includes(this.state.listSearch)})
                         .map((value, index) => (
-                            <ContactListItem key={index} index={index} id={value.id} name={value.name} address={value.address} phone={value.phone} onEditName={onEditName} onEditAddress={onEditAddress} onEditPhone={onEditPhone}/>
+                            <ContactListItem 
+                                key={index} index={index} 
+                                id={value.id} name={value.name} 
+                                address={value.address} phone={value.phone} 
+                                onEditName={onEditName} onEditAddress={onEditAddress} 
+                                onEditPhone={onEditPhone} phoneChange={phoneChange}
+                                onDel={onDel} 
+                            />
                         ))
                     }
                 </div>
